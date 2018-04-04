@@ -1,10 +1,11 @@
 import sys
 import copy
 import itertools
+import numpy as np
 # import the Point, Block, and Laser objects
 
 
-class Game:
+class Game(object):
     '''
     The game grid.  Here we read in some user input, assign all our blocks,
     lasers, and points, determine all the possible different combinations
@@ -48,8 +49,44 @@ class Game:
 
             None
         '''
-        pass
-
+        lines = [] # relevant lines
+        P = [] #laser points
+        lasers = []
+        num_blocks = np.zeros((3,1))
+        with open(fptr,"r") as f:
+           for line in f:
+               if line[0] == "#" or line == "\n" or line == "GRID START\n":
+                   pass
+               else:
+                lines.append(line)
+        # find size of board create empty matrix rows x collumns
+        collumns = []
+        rows = 0
+        for line in lines:
+            if line[0]=="o" or line[0] == "x":
+               rows+=1
+               collumns.append(line.count('o') + line.count('x'))
+        board = np.zeros((rows,max(collumns)))
+        #build board with 1s as non-usable spots and 0s as usable spots
+        for i in range(rows):
+            a = lines[i]
+            for j in range(max(collumns)):
+                if a[j*4] == "o":
+                    board[i,j] = 0
+                elif a[j*4] == "x":
+                    board[i,j] = 1
+                else:
+                    print('there is an error with reading in the board')
+        for i in range(len(lines)):
+            a = lines[i]
+            if a[0] == "A":num_blocks[0] = (a[2]) 
+            elif a[0] == "B":num_blocks[1] = (a[2])
+            elif a[0] == "C":num_blocks[2] = (a[2])
+            elif a[0] == "L":lasers.append(a)
+            elif a[0] == "P":P.append(a)
+        return board, num_blocks, lasers, P
+        
+        
     def generate_boards(self):
         '''
         Difficulty 3
@@ -164,5 +201,11 @@ class Game:
               child_laser = laser.update(self.board, self.points)
 
             # MAYBE MORE CODE HERE?
+            # some_file.py
 
             # CHECKS HERE
+#read board and dispose of non-pertanent lines
+B = print(Game.read("braid_5.input"))
+
+       
+
