@@ -98,6 +98,8 @@ class Game(object):
     def generate_boards(self):
         '''
         Difficulty 3
+		
+		CHECK REAL QUICK
 
         A function to generate all possible board combinations with the
         available blocks.
