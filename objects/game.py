@@ -59,6 +59,7 @@ class Game(object):
                    pass
                else:
                 lines.append(line)
+        print(f)
         # find size of board create empty matrix rows x collumns
         collumns = []
         rows = 0
@@ -82,9 +83,16 @@ class Game(object):
             if a[0] == "A":num_blocks[0] = (a[2]) 
             elif a[0] == "B":num_blocks[1] = (a[2])
             elif a[0] == "C":num_blocks[2] = (a[2])
-            elif a[0] == "L":lasers.append(a)
-            elif a[0] == "P":P.append(a)
-        return board, num_blocks, lasers, P
+            elif a[0] == "L":lasers.append(a[2::].strip('\n'))
+            elif a[0] == "P":P.append(a[2::].strip('\n'))
+        laser = np.zeros((len(lasers),4))
+        Points = np.zeros((len(P),2))
+        for i in range(len(laser)):
+            laser[i] = np.fromstring(lasers[i],dtype=int,sep=' ')
+        for i in range(len(Points)):
+            Points[i] = np.fromstring(P[i],dtype = int,sep=' ')
+        return board, num_blocks, laser, Points
+        
         
         
     def generate_boards(self):
@@ -205,7 +213,7 @@ class Game(object):
 
             # CHECKS HERE
 #read board and dispose of non-pertanent lines
-B = print(Game.read("braid_5.input"))
+B = Game("braid_5.input")
 
        
 
