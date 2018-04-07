@@ -91,6 +91,7 @@ class Game(object):
             laser[i] = np.fromstring(lasers[i],dtype=int,sep=' ')
         for i in range(len(Points)):
             Points[i] = np.fromstring(P[i],dtype = int,sep=' ')
+        print (board)
         return board, num_blocks, laser, Points
         
         
@@ -98,9 +99,7 @@ class Game(object):
     def generate_boards(self):
         '''
         Difficulty 3
-		
-		CHECK REAL QUICK
-
+        
         A function to generate all possible board combinations with the
         available blocks.
 
@@ -116,6 +115,8 @@ class Game(object):
 
             None
         '''
+
+
 
         def get_partitions(n, k):
             '''
