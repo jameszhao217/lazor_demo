@@ -31,8 +31,15 @@ class Game(object):
         '''
         self.fname = fptr
         self.read(fptr)
+<<<<<<< HEAD
         self.generate_boards()
         
+=======
+        self.board #matrix of available spaces 1=x 0=o
+        self.num_type_blocks # number of each type of block [A,B,C]
+        self.points #points that need to be intersected with the laser
+        self.laser #laser coordinates
+>>>>>>> master
 
     # DO SOMETHING HERE SO WE CAN PRINT A REPRESENTATION OF GAME!
 
@@ -93,8 +100,15 @@ class Game(object):
             laser[i] = np.fromstring(lasers[i],dtype=int,sep=' ')
         for i in range(len(Points)):
             Points[i] = np.fromstring(P[i],dtype = int,sep=' ')
+<<<<<<< HEAD
         print (board[1])
         return board, num_blocks, laser, Points
+=======
+        self.board = board
+        self.num_type_blocks = num_blocks
+        self.points = Points
+        self.laser = laser
+>>>>>>> master
         
         
         
@@ -219,6 +233,11 @@ class Game(object):
 #read board and dispose of non-pertanent lines
 B = Game("braid_5.input")
 
+<<<<<<< HEAD
 C = B.generate_boards()
 
+=======
+
+       
+>>>>>>> master
 
