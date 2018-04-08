@@ -31,6 +31,8 @@ class Game(object):
         '''
         self.fname = fptr
         self.read(fptr)
+        self.generate_boards()
+        
 
     # DO SOMETHING HERE SO WE CAN PRINT A REPRESENTATION OF GAME!
 
@@ -91,7 +93,7 @@ class Game(object):
             laser[i] = np.fromstring(lasers[i],dtype=int,sep=' ')
         for i in range(len(Points)):
             Points[i] = np.fromstring(P[i],dtype = int,sep=' ')
-        print (board)
+        print (board[1])
         return board, num_blocks, laser, Points
         
         
@@ -115,8 +117,7 @@ class Game(object):
 
             None
         '''
-
-
+#        print (board[1])
 
         def get_partitions(n, k):
             '''
@@ -140,7 +141,7 @@ class Game(object):
         boards = []
 
         # YOUR CODE HERE
-        pass
+        return boards
 
     def set_board(self, board):
         '''
@@ -218,5 +219,6 @@ class Game(object):
 #read board and dispose of non-pertanent lines
 B = Game("braid_5.input")
 
-       
+C = B.generate_boards()
+
 
