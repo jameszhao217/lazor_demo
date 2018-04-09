@@ -334,6 +334,7 @@ class Game(object):
             
 #read board and dispose of non-pertanent lines
 
+
 B = Game("diagonal_8.input")
 
 
