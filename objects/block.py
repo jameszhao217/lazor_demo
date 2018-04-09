@@ -9,19 +9,20 @@ class Block(object):
         (c) See-Through block - Both reflects and lets light pass
     '''
     def __init__(self,n):
+        # n is integer decribing block type
+        # 0 available, 1 unavailable, 2 refract,3reflect,4opaque
+        
         self.num = n
         self.laser_int(n)
+        self.continues
         self.reflect
-        self.refract
     def laser_int(self,num): #how it interacts with a laser hitting it
-        Reflect = False
-        Refract = False
+        Cont = False #laser continues in direction
+        Reflect = False # laser is reflected
         if num in (2,3):
             Reflect=True
-            if num == 2:
-                Refract = True
+        if num in (2,0,1):
+            Cont = True
         self.reflect = Reflect
-        self.refract = Refract
+        self.continues = Cont
             
-block = Block(2)  
-
