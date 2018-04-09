@@ -222,10 +222,6 @@ class Game(object):
             # CHECKS HERE
 #read board and dispose of non-pertanent lines
 B = Game("diagonal_8.input")
-print(B.board)
-print(B.points)
-print(B.num_type_blocks)
-print(B.laser)
 
 
 
