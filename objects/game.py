@@ -63,28 +63,25 @@ class Game(object):
                    pass
                else:
                 lines.append(line)
-        print(f)
         # find size of board create empty matrix rows x collumns
         collumns = []
         rows = 0
         for line in lines:
-            if line[0]=="o" or line[0] == "x":
+            if line[0] in ('o','x','A','B','C') and line[4] in ('o','x','A','B','C'):
                rows+=1
-               collumns.append(line.count('o') + line.count('x'))
+               collumns.append(line.count('o') + line.count('x')+line.count('A')+line.count('B')+line.count('C'))
+            else:
+                break
         board = np.chararray((rows,max(collumns)))
-        print(lines)
         #build board with 1s as non-usable spots and 0s as usable spots
         for i in range(rows):
             a = lines[i]
             for j in range(max(collumns)):
-                if a[j*4] == "o":
-                    board[i,j] = "o"
-                elif a[j*4] == "x":
-                    board[i,j] = "x"
+                if a[j*4] == "o" or a[j*4]=="x" or a[j*4]=="A" or a[j*4]=="B" or a[j*4]=="C":
+                    board[i,j] = a[j*4]
                 else:
                     print('there is an error with reading in the board')
-        
-        for i in range(len(lines)):
+        for i in range(rows,len(lines)):
             a = lines[i]
             if a[0] == "A":num_blocks[0] = (a[2]) 
             elif a[0] == "B":num_blocks[1] = (a[2])
@@ -203,7 +200,7 @@ class Game(object):
         print("Done")
         sys.stdout.flush()
 
-        print("Playing boards...")
+        print("Playing boards...") 
         sys.stdout.flush()
         # Loop through the boards, and "play" them
         for b_index, board in enumerate(boards):
@@ -222,8 +219,7 @@ class Game(object):
 
             # CHECKS HERE
 #read board and dispose of non-pertanent lines
-B = Game("braid_5.input")
-print(B.board)
+B = Game("diagonal_8.input")
 
 
        
