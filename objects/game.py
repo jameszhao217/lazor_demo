@@ -79,7 +79,6 @@ class Game(object):
                collumns.append(line.count('o') + line.count('x')+line.count('A')+line.count('B')+line.count('C'))
              else: break
         board = np.empty((rows,max(collumns)),dtype=str)
-        print(lines)
         #build board with the ecorrect string
         for i in range(rows):
             a = lines[i]
