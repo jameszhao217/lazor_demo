@@ -74,17 +74,19 @@ class Game(object):
             if line[0]=="o" or line[0] == "x":
                rows+=1
                collumns.append(line.count('o') + line.count('x'))
-        board = np.zeros((rows,max(collumns)))
+        board = np.chararray((rows,max(collumns)))
+        print(lines)
         #build board with 1s as non-usable spots and 0s as usable spots
         for i in range(rows):
             a = lines[i]
             for j in range(max(collumns)):
                 if a[j*4] == "o":
-                    board[i,j] = 0
+                    board[i,j] = "o"
                 elif a[j*4] == "x":
-                    board[i,j] = 1
+                    board[i,j] = "x"
                 else:
                     print('there is an error with reading in the board')
+        
         for i in range(len(lines)):
             a = lines[i]
             if a[0] == "A":num_blocks[0] = (a[2]) 
@@ -290,5 +292,6 @@ class Game(object):
             
 #read board and dispose of non-pertanent lines
 B = Game("braid_5.input")
+print(B.board)
 
 
