@@ -31,15 +31,13 @@ class Game(object):
         '''
         self.fname = fptr
         self.read(fptr)
-<<<<<<< HEAD
-        self.generate_boards()
+        self.board              # matrix of available spaces 1=x 0=o
+        self.num_type_blocks    # number of each type of block [A,B,C]
+        self.points             # points that need to be intersected with the laser
+        self.laser              # laser coordinates
         
-=======
-        self.board #matrix of available spaces 1=x 0=o
-        self.num_type_blocks # number of each type of block [A,B,C]
-        self.points #points that need to be intersected with the laser
-        self.laser #laser coordinates
->>>>>>> master
+        self.generate_boards()
+        self.available_space
 
     # DO SOMETHING HERE SO WE CAN PRINT A REPRESENTATION OF GAME!
 
@@ -100,19 +98,28 @@ class Game(object):
             laser[i] = np.fromstring(lasers[i],dtype=int,sep=' ')
         for i in range(len(Points)):
             Points[i] = np.fromstring(P[i],dtype = int,sep=' ')
-<<<<<<< HEAD
-        print (board[1])
-        return board, num_blocks, laser, Points
-=======
         self.board = board
         self.num_type_blocks = num_blocks
         self.points = Points
         self.laser = laser
->>>>>>> master
         
         
         
     def generate_boards(self):
+
+        def get_partitions(n, k):
+            '''
+            A robust way of getting all permutations.  Note, this is clearly not the fastest
+            way about doing this though.
+
+            **Reference**
+
+             - http://stackoverflow.com/a/34690583
+            '''
+            for c in itertools.combinations(range(n + k - 1), k - 1):
+                yield [b - a - 1 for a, b in zip((-1,) + c, c + (n + k - 1,))]
+
+
         '''
         Difficulty 3
         
@@ -131,31 +138,79 @@ class Game(object):
 
             None
         '''
-#        print (board[1])
+        
+        # To obtain the number of blocks
+        N_blocks = sum(self.num_type_blocks)
+        N_blocks = int(N_blocks[0])
+        
+        
+        print (self.board)
 
-        def get_partitions(n, k):
-            '''
-            A robust way of getting all permutations.  Note, this is clearly not the fastest
-            way about doing this though.
-
-            **Reference**
-
-             - http://stackoverflow.com/a/34690583
-            '''
-            for c in itertools.combinations(range(n + k - 1), k - 1):
-                yield [b - a - 1 for a, b in zip((-1,) + c, c + (n + k - 1,))]
-
+        # Dimension of Board
+        b_rows = len(self.board)
+        b_cols = len(self.board[0])
+        
+        # To obtain the number of available spaces
+        count_zeros = 0
+        for x in range(0, b_rows):
+            for y in range(0,b_cols):
+                if self.board[x,y] == 0:
+                    count_zeros = count_zeros+1
+        self.available_space = count_zeros
+        print(self.available_space)
+                    
         # Get the different possible block positions.  Note, due to the function we're using, we
         # skip any instance of multiple "stars in bins".
         partitions = [
-            p for p in get_partitions(len(self.blocks), self.available_space) if max(p) == 1
+            p for p in get_partitions(N_blocks, self.available_space) if max(p) == 1
         ]
+        print(len(partitions))
 
         # Now we have the partitions, we just need to make our boards
         boards = []
+        
+
+        
+        # Assign partitions into boards
+        
+            
+                
+                    
+        for i in range(0,4):  #len(partitions)
+            ppp = partitions[i]
+#            print(ppp)
+            boardsss = []
+            counter = 0
+            for x in range(0, len(self.board)):
+                for y in range(0,len(self.board[0])):
+                    if self.board[x,y] == 0:
+                        boardsss.append(ppp[counter])
+                        counter = counter + 1
+                    else:
+                        boardsss.append(self.board[x,y])
+#            print(boardsss)
+            boards.append(boardsss)
+
+            
+            
+            
+            
+
+ #       print(counter)
+#        print(counter2)
+                    
+        print(boards)
+
+
+
+
+
 
         # YOUR CODE HERE
         return boards
+
+
+
 
     def set_board(self, board):
         '''
@@ -174,7 +229,7 @@ class Game(object):
 
             None
         '''
-        # YOUR CODE HERE
+        # YOUR CODE HERE 
         pass
 
     def save_board(self):
@@ -230,14 +285,10 @@ class Game(object):
             # some_file.py
 
             # CHECKS HERE
+            
+            
+            
 #read board and dispose of non-pertanent lines
 B = Game("braid_5.input")
 
-<<<<<<< HEAD
-C = B.generate_boards()
-
-=======
-
-       
->>>>>>> master
 
