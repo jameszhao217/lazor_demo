@@ -31,14 +31,15 @@ class Game(object):
         '''
         self.fname = fptr
         self.read(fptr)
-        self.board              # matrix of available spaces 1=x 0=o
-        self.num_type_blocks    # number of each type of block [A,B,C]
-        self.points             # points that need to be intersected with the laser
-        self.laser              # laser coordinates
         
         self.generate_boards()
         self.available_space
         self.boards
+        self.board #matrix representing the board (A,B,C,x,o)
+        self.num_type_blocks # number of each type of block [A,B,C]
+        self.points #points that need to be intersected with the laser
+        self.laser #laser coordinates
+
 
     # DO SOMETHING HERE SO WE CAN PRINT A REPRESENTATION OF GAME!
 
@@ -70,18 +71,20 @@ class Game(object):
         # find size of board create empty matrix rows x collumns
         collumns = []
         rows = 0
+        characters = ['x','o','A','B','C']
+        #create empty numpy array of the size of the board
         for line in lines:
-            if line[0] in ('o','x','A','B','C') and line[4] in ('o','x','A','B','C'):
+             if line[0] in characters and line[4] in characters:
                rows+=1
                collumns.append(line.count('o') + line.count('x')+line.count('A')+line.count('B')+line.count('C'))
-            else:
-                break
-        board = np.chararray((rows,max(collumns)))
-        #build board with 1s as non-usable spots and 0s as usable spots
+             else: break
+        board = np.empty((rows,max(collumns)),dtype=str)
+        print(lines)
+        #build board with the ecorrect string
         for i in range(rows):
             a = lines[i]
             for j in range(max(collumns)):
-                if a[j*4] == "o" or a[j*4]=="x" or a[j*4]=="A" or a[j*4]=="B" or a[j*4]=="C":
+                if a[j*4] in characters:
                     board[i,j] = a[j*4]
                 else:
                     print('there is an error with reading in the board')
@@ -180,7 +183,7 @@ class Game(object):
             print(partitions_A[5])
             
             # Assign partitions into boards
-            for i in range(0,len(partitions)):  #4len(partitions)
+            for i in range(0,len(partitions_A)):  #4len(partitions)
                 ppp = partitions_A[i]
                 board_draft = []
                 counter = 0
@@ -198,22 +201,22 @@ class Game(object):
             partitions_B = [
                 p for p in get_partitions(N_Blocks_B, self.available_space-N_Blocks_A) if max(p) == 1
             ]
-            print(len(partitions_B))
-            print(partitions_B[5])
+      #      print(len(partitions_B))
+       #     print(partitions_B[5])
             
             for q in range(0, len(partitions_B)):
                 q_b = partitions_B[q]
                 for qq in range(0,len(q_b)):
                     if q_b[qq] == 1:
                         q_b[qq] = 3
-            print(partitions_B[5])
+      #      print(partitions_B[5])
 
             # Assign partitions into boards
             for i in range(0,len(partitions_B)):
                 ppp = partitions_B[i]
                 bbb = boards[i]
-                print(ppp)
-                print(bbb)
+            #    print(ppp)
+           #     print(bbb)
                 
                 counter2 = 0
                 for x in range(0, len(bbb)):
@@ -226,7 +229,7 @@ class Game(object):
             partitions_C = [
                 p for p in get_partitions(N_Blocks_C, self.available_space-N_Blocks_A-N_Blocks_B) if max(p) == 1
             ]
-            print(len(partitions_C))
+#            print(len(partitions_C))
 
             # Assign partitions into boards
             for i in range(0,len(partitions_C)):
@@ -306,7 +309,7 @@ class Game(object):
         sys.stdout.flush()
         boards = self.generate_boards()
         print("Done")
-        sys.stdout.flush()
+        sys.stdout.flush() 
 
         print("Playing boards...") 
         sys.stdout.flush()
@@ -330,12 +333,7 @@ class Game(object):
             
             
 #read board and dispose of non-pertanent lines
-<<<<<<< HEAD
-B = Game("diagonal_8.input")
 
-=======
-B = Game("braid_5.input")
-#print(B.board)
->>>>>>> b396cc66810ac752423e80b2802dd7afbfa2a564
+B = Game("diagonal_8.input")
 
 
