@@ -2,6 +2,10 @@ import sys
 import copy
 import itertools
 import numpy as np
+
+from itertools import permutations
+
+
 # import the Point, Block, and Laser objects
 
 
@@ -39,6 +43,7 @@ class Game(object):
         self.generate_boards()
         self.available_space
         self.boards
+        self.partitions
 
     # DO SOMETHING HERE SO WE CAN PRINT A REPRESENTATION OF GAME!
 
@@ -110,47 +115,8 @@ class Game(object):
         
     def generate_boards(self):
 
-        ## Obtain the number of each type of blocks from num_type_blocks
-        N_Blocks_A = int(self.num_type_blocks[0])   
-        # -----> Numbered 2 for laser.py
-        
-        N_Blocks_B = int(self.num_type_blocks[1]) # 
-        # -----> Numbered 3 for laser.py
-        
-        N_Blocks_C = int(self.num_type_blocks[2])
-        # -----> Numbered 1 for laser.py
-        
-        ## Dimension of Board
-        b_rows = len(self.board)
-        b_cols = len(self.board[0])
-        print (self.board)
-
-        ## Obtain the number of available spaces from board read above
-        count_zeros = 0
-        for x in range(0, b_rows):
-            for y in range(0,b_cols):
-                if self.board[x,y] == 'o':
-                    count_zeros = count_zeros+1
-        self.available_space = count_zeros
-        print(self.available_space)
- 
-        ## Initialize list "boards" used to store all possible permutations
-        boards = []
-
-        def get_partitions(n, k):
-            '''
-            A robust way of getting all permutations.  Note, this is clearly not the fastest
-            way about doing this though.
-
-            **Reference**
-
-             - http://stackoverflow.com/a/34690583
-            '''
-            for c in itertools.combinations(range(n + k - 1), k - 1):
-                yield [b - a - 1 for a, b in zip((-1,) + c, c + (n + k - 1,))]
-
         '''
-        Difficulty 3        
+        Difficulty 3
         A function to generate all possible board combinations with the
         available blocks.
         First get all possible combinations of blocks on the board (we'll call these boards)
@@ -164,93 +130,139 @@ class Game(object):
             None
         '''
 
-        # Get the different possible block positions.  Note, due to the function we're using, we
-        # skip any instance of multiple "stars in bins".
+        ### Obtain the number of each type of blocks from num_type_blocks
+
+        N_Blocks_A = 5 #int(self.num_type_blocks[0])   
+        # -----> Numbered 2 for laser.py
         
-        # TYPE A BLOCKS
-        if N_Blocks_A > 0:
-            partitions_A = [
-                p for p in get_partitions(N_Blocks_A, self.available_space) if max(p) == 1
-            ]
-            print(len(partitions_A))
-            print(partitions_A[5])
-            
-            for q in range(0, len(partitions_A)):
-                q_a = partitions_A[q]
-                for qq in range(0,len(q_a)):
-                    if q_a[qq] == 1:
-                        q_a[qq] = 2
-            print(partitions_A[5])
-            
-            # Assign partitions into boards
-            for i in range(0,len(partitions)):  #4len(partitions)
-                ppp = partitions_A[i]
-                board_draft = []
-                counter = 0
-                for x in range(0, len(self.board)):
-                    for y in range(0,len(self.board[0])):
-                        if self.board[x,y] == 'o':
-                            board_draft.append(ppp[counter])
-                            counter = counter + 1
-                        else:
-                            board_draft.append(self.board[x,y])
-                boards.append(board_draft)
+        N_Blocks_B = 0 #int(self.num_type_blocks[1])
+        # -----> Numbered 3 for laser.py
+        
+        N_Blocks_C = 0 #int(self.num_type_blocks[2])
+        # -----> Numbered 1 for laser.py
+        
+        N_Blocks = N_Blocks_A + N_Blocks_B + N_Blocks_C
+        # Total Number of Blocks from the input file
+        
+        ### Dimension of Board
+        b_rows = len(self.board)
+        b_cols = len(self.board[0])
+        print (self.board)
 
-        # TYPE B BLOCKS
-        if N_Blocks_B > 0: 
-            partitions_B = [
-                p for p in get_partitions(N_Blocks_B, self.available_space-N_Blocks_A) if max(p) == 1
-            ]
-            print(len(partitions_B))
-            print(partitions_B[5])
-            
-            for q in range(0, len(partitions_B)):
-                q_b = partitions_B[q]
-                for qq in range(0,len(q_b)):
-                    if q_b[qq] == 1:
-                        q_b[qq] = 3
-            print(partitions_B[5])
+        ### Obtain the number of available spaces from board read above
+        count_zeros = 0
+        for x in range(0, b_rows):
+            for y in range(0,b_cols):
+                if self.board[x,y] == 'o':
+                    count_zeros = count_zeros+1
+        self.available_space = count_zeros
 
-            # Assign partitions into boards
-            for i in range(0,len(partitions_B)):
-                ppp = partitions_B[i]
-                bbb = boards[i]
-                print(ppp)
-                print(bbb)
+        ### Initialize list "boards" used to store all possible permutations
+        boards = []
+
+        ### Function used to get all permuations
+        def get_partitions(n, k):
+            '''
+            A robust way of getting all permutations.  Note, this is clearly not the fastest
+            way about doing this though.
+
+            **Reference**
+
+             - http://stackoverflow.com/a/34690583
+            '''
+            for c in itertools.combinations(range(n + k - 1), k - 1):
+                yield [b - a - 1 for a, b in zip((-1,) + c, c + (n + k - 1,))]
+        
+        ### Get the different possible block positions.  
+        # Note, due to the function we're using, we skip any instance of multiple "stars in bins".
+        partitions = [
+            p for p in get_partitions(N_Blocks, self.available_space) if max(p) == 1
+        ]
+        self.partitions = partitions
+
+        ###################################################################
+        ### Now we have the partitions, we just need to make our boards ###
+        ###################################################################
+        
+        ### Make a list of all types of block
+        list_block = ''
+        for i in range(0, N_Blocks_A):
+            list_block = list_block + '2' #list_block.append(200 + i)
+        for i in range(0, N_Blocks_B):
+            list_block = list_block + '3' #list_block.append(300 + i)
+        for i in range(0, N_Blocks_C):
+            list_block = list_block + '1' # list_block.append(100 + i)           
+        print(list_block)
+        
+        ### Functions used to produce internal permutations
+        def unique_perms(series):
+            return {"".join(p) for p in permutations(series)}
+        
+        ### Obtain the internal permutations at each board partition
+        partitions_blocks = sorted(unique_perms(list_block))
+        print partitions_blocks
+        print(len(partitions_blocks))
+
+        ### Generate the Structure of boards, which will be filled in with 
+        # internal permuations at each blocks assignment
+        ppp_draft = []
+        for i in range(0, 2): #len(partitions)):
+            for j in range(0, len(partitions_blocks)):
+                ppp_draft.append(partitions[i])
+        print(len(partitions))
+        print(len(partitions_blocks))
+        print(len(ppp_draft))
+        
+        print('#########################')
+
+        ####################################################
+        ### Assign Internal Permutations into Partitions ###
+        ####################################################
+
+        boards_final = []
+        
+        pointer = 0
+        for i in range(len(ppp_draft)):
+            
+            boards_element = []
+            
+            if pointer >= len(partitions_blocks):
+                 turnover = pointer/len(partitions_blocks)
+                 pointer = pointer - len(partitions_blocks)*turnover
+            
+            count = 0
+            for j in range(len(ppp_draft[i])):                
+                if ppp_draft[i][j] == 0:
+                    boards_element.append(ppp_draft[i][j])
+                else:
+                    boards_element.append(int(partitions_blocks[pointer][count]))
+                    count += 1
+
+            pointer += 1
+            boards_final.append(boards_element)
                 
-                counter2 = 0
-                for x in range(0, len(bbb)):
-                    if bbb[x] == 0:
-                        bbb[x] = ppp[counter2]
-                        counter2 = counter2 + 1
+        print(boards_final)
 
-        # TYPE C BLOCKS
-        if N_Blocks_C > 0:
-            partitions_C = [
-                p for p in get_partitions(N_Blocks_C, self.available_space-N_Blocks_A-N_Blocks_B) if max(p) == 1
-            ]
-            print(len(partitions_C))
+        ##############################################
+        ### FINALLY, Assign partitions into boards ###
+        ##############################################
 
-            # Assign partitions into boards
-            for i in range(0,len(partitions_C)):
-                ppp = partitions_C[i]
-                bbb = boards[i]
-                print(ppp)
-                print(bbb)
-                
-                counter3 = 0
-                for x in range(0, len(bbb)):
-                    if bbb[x] == 0:
-                        bbb[x] = ppp[counter3]
-                        counter3 = counter3 + 1
-
-
-        
-        
+        for i in range(0, len(ppp_draft)):    #len(boards_final)):
+            ppp = boards_final[i]
+            board_draft = []
+            counter = 0
+            for x in range(0, b_rows):
+                for y in range(0, b_cols):
+                    if self.board[x,y] == 'o':
+                        board_draft.append(ppp[counter])
+                        counter = counter + 1
+                    else:
+                        board_draft.append(self.board[x,y])
+            boards.append(board_draft)
 
         print(boards)
         self.boards = boards
-
+        
         return boards
 
 
@@ -334,6 +346,4 @@ class Game(object):
             
 #read board and dispose of non-pertanent lines
 B = Game("braid_5.input")
-#print(B.board)
-
 
