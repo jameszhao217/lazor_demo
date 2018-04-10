@@ -39,15 +39,13 @@ class Game(object):
         self.generate_boards()
         self.available_space
         self.boards
-<<<<<<< HEAD
         self.partitions
-=======
+
         self.board #matrix representing the board (A,B,C,x,o)
         self.num_type_blocks # number of each type of block [A,B,C]
         self.points #points that need to be intersected with the laser
         self.laser #laser coordinates
 
->>>>>>> master
 
     # DO SOMETHING HERE SO WE CAN PRINT A REPRESENTATION OF GAME!
 
@@ -228,7 +226,6 @@ class Game(object):
             
             boards_element = []
             
-<<<<<<< HEAD
             if pointer >= len(partitions_blocks):
                  turnover = pointer/len(partitions_blocks)
                  pointer = pointer - len(partitions_blocks)*turnover
@@ -240,70 +237,6 @@ class Game(object):
                 else:
                     boards_element.append(int(partitions_blocks[pointer][count]))
                     count += 1
-=======
-            # Assign partitions into boards
-            for i in range(0,len(partitions_A)):  #4len(partitions)
-                ppp = partitions_A[i]
-                board_draft = []
-                counter = 0
-                for x in range(0, len(self.board)):
-                    for y in range(0,len(self.board[0])):
-                        if self.board[x,y] == 'o':
-                            board_draft.append(ppp[counter])
-                            counter = counter + 1
-                        else:
-                            board_draft.append(self.board[x,y])
-                boards.append(board_draft)
-
-        # TYPE B BLOCKS
-        if N_Blocks_B > 0: 
-            partitions_B = [
-                p for p in get_partitions(N_Blocks_B, self.available_space-N_Blocks_A) if max(p) == 1
-            ]
-      #      print(len(partitions_B))
-       #     print(partitions_B[5])
-            
-            for q in range(0, len(partitions_B)):
-                q_b = partitions_B[q]
-                for qq in range(0,len(q_b)):
-                    if q_b[qq] == 1:
-                        q_b[qq] = 3
-      #      print(partitions_B[5])
-
-            # Assign partitions into boards
-            for i in range(0,len(partitions_B)):
-                ppp = partitions_B[i]
-                bbb = boards[i]
-            #    print(ppp)
-           #     print(bbb)
-                
-                counter2 = 0
-                for x in range(0, len(bbb)):
-                    if bbb[x] == 0:
-                        bbb[x] = ppp[counter2]
-                        counter2 = counter2 + 1
-
-        # TYPE C BLOCKS
-        if N_Blocks_C > 0:
-            partitions_C = [
-                p for p in get_partitions(N_Blocks_C, self.available_space-N_Blocks_A-N_Blocks_B) if max(p) == 1
-            ]
-#            print(len(partitions_C))
-
-            # Assign partitions into boards
-            for i in range(0,len(partitions_C)):
-                ppp = partitions_C[i]
-                bbb = boards[i]
-                print(ppp)
-                print(bbb)
-                
-                counter3 = 0
-                for x in range(0, len(bbb)):
-                    if bbb[x] == 0:
-                        bbb[x] = ppp[counter3]
-                        counter3 = counter3 + 1
-
->>>>>>> master
 
             pointer += 1
             boards_final.append(boards_element)
@@ -412,12 +345,8 @@ class Game(object):
             
             
 #read board and dispose of non-pertanent lines
-<<<<<<< HEAD
 B = Game("braid_5.input")
-=======
 
+BB = Game("diagonal_8.input")
 
-B = Game("diagonal_8.input")
-
->>>>>>> master
 
