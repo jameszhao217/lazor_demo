@@ -213,7 +213,7 @@ class Game(object):
         ### Generate the Structure of boards, which will be filled in with 
         # internal permuations at each blocks assignment
         ppp_draft = []
-        for i in range(0, 4): #len(partitions)):
+        for i in range(0, len(partitions)): #len(partitions)):
             for j in range(0, len(partitions_blocks)):
                 ppp_draft.append(partitions[i])
         print(len(partitions))
