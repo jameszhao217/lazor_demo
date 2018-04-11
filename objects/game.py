@@ -2,6 +2,7 @@ import sys
 import copy
 import itertools
 import numpy as np
+from block import Block
 
 from itertools import permutations
 
@@ -266,7 +267,7 @@ class Game(object):
                         board_draft.append(self.board[x,y])
             boards.append(board_draft)
 
-        print(boards)
+#        print(boards)
         self.boards = boards
         
         return boards
@@ -302,30 +303,38 @@ class Game(object):
             for j in range(len(boards[i])):            
                 BBB = np.reshape(AAA, (self.rows, self.cols))      
                 
+        print(BBB)
+        
+        b0 = Block('0')
+        b1 = Block('1')
+        b2 = Block('2')
+        b3 = Block('3')
+        b4 = Block('4')
+        
+        BBB = np.array(BBB, dtype=Block)
         for i in range(self.rows):
             for j in range(self.cols):
                 if BBB[i,j] == '3':     # TYPE A
-                    BBB[i,j] = Block('3')
+                    BBB[i,j] = b3
                 elif BBB[i,j] == '4':   # TYPE B
-                    BBB[i,j] = Block('4')
+                    BBB[i,j] = b4
                 elif BBB[i,j] == '2':   # TYPE C
-                    BBB[i,j] = Block('2')
+                    BBB[i,j] = b2
                 elif BBB[i,j] == 'A':   # TYPE A
-                    BBB[i,j] = Block('3')
+                    BBB[i,j] = b3
                 elif BBB[i,j] == 'B':   # TYPE B
-                    BBB[i,j] = Block('4')
+                    BBB[i,j] = b4
                 elif BBB[i,j] == 'C':   # TYPE C
-                    BBB[i,j] = Block('2')
+                    BBB[i,j] = b2
                 elif BBB[i,j] == '0':   # Available
-                    BBB[i,j] = Block('0')
-                else:   # Not Available
-                    BBB[i,j] = Block('1')
+                    BBB[i,j] = b0
+                else:                   # Not Available
+                    BBB[i,j] = b1
                
-        
-        
-        print BBB
-#        print type(BBB[2,2])
-        
+
+        print "X"
+        print (BBB)
+        print BBB[4][3].reflect
         
         # YOUR CODE HERE 
         
@@ -395,5 +404,4 @@ class Game(object):
 # B = Game("braid_5.input")
 
 BB = Game("diagonal_8.input")
-
 
