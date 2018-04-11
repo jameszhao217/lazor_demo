@@ -25,6 +25,3 @@ class Block(object):
             Cont = True
         self.reflect = Reflect
         self.continues = Cont
-            
-A = Block('2')
-print(A.reflect)
