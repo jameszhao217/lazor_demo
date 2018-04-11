@@ -10,7 +10,12 @@ class Point:
 
         DONT FORGET TO COMMENT!
         '''
-        pass
+        self.position = pos
+    def check_intersection(self,pos):
+        if self.position == pos:
+            return True
+        else:
+            return False
 
     # MORE
     # Difficulty 1
