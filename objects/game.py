@@ -111,11 +111,8 @@ class Game(object):
             laser[i] = np.fromstring(lasers[i],dtype=int,sep=' ')
         for i in range(len(Points)):
             Points[i] = np.fromstring(P[i],dtype = int,sep=' ')
-<<<<<<< HEAD
-        print(Points)
-=======
+
         
->>>>>>> terrence.py
         self.board = board
         self.num_type_blocks = num_blocks
         self.points = Points
@@ -308,7 +305,7 @@ class Game(object):
             for j in range(len(boards[i])):            
                 BBB = np.reshape(AAA, (self.rows, self.cols))      
                 
-        print(BBB)
+        print('BBB1',BBB)
         
         b0 = Block('0')
         b1 = Block('1')
@@ -335,19 +332,13 @@ class Game(object):
                     BBB[i,j] = b0
                 else:                   # Not Available
                     BBB[i,j] = b1
-               
-
-        print "X"
-        print (BBB)
-        print BBB[4][3].reflect
-        
-        # YOUR CODE HERE 
+        print(len(boards))
+        print('BBB2',BBB)
+                
         
         
         
         
-        
-        pass
 
     def save_board(self):
         '''
@@ -376,7 +367,7 @@ class Game(object):
 
             None
         '''
-
+        print('hello world')
         # Get all boards
         print("Generating all the boards..."),
         sys.stdout.flush()
@@ -404,7 +395,7 @@ class Game(object):
             break
         print('out of loop')
 
-<<<<<<< HEAD
+
             # MAYBE MORE CODE HERE?
             # some_file.py
 
@@ -416,9 +407,3 @@ class Game(object):
 # B = Game("braid_5.input")
 
 BB = Game("diagonal_8.input")
-=======
-#read board and dispose of non-pertanent lines
-
->>>>>>> terrence.py
-
-B = Game('diagonal_8.input')
