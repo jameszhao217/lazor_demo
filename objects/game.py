@@ -277,7 +277,7 @@ class Game(object):
 
 
 
-    def set_board(self, boards):
+    def set_board(self, board):
         
         '''
         Difficulty 2
@@ -296,14 +296,12 @@ class Game(object):
             None
         '''
         print('*****')        
-        print(boards)   
+        print(board)   
         print(self.rows)
         print(self.cols)
         
-        for i in range(len(boards)):         
-            AAA = np.array(boards[i])         
-            for j in range(len(boards[i])):            
-                BBB = np.reshape(AAA, (self.rows, self.cols))      
+        AAA = np.array(board)         
+        BBB = np.reshape(AAA, (self.rows, self.cols))      
                 
         print('BBB1',BBB)
         
