@@ -39,19 +39,6 @@ class Game(object):
         self.fname = fptr
         self.read(fptr)
         
-#        self.available_space
-#        self.boards
-#        self.partitions
-#        self.rows
-#        self.cols
-        
-#        self.set_board(self.boards)
-
-#        self.board #matrix representing the board (A,B,C,x,o)
-#        self.num_type_blocks # number of each type of block [A,B,C]
-#        self.points #points that need to be intersected with the laser
-#        self.laser #laser coordinates
-
     def __str__(self):
         a = 'this is the board read in'+'\n'
         b = '\n'.join(self.display_board)
@@ -380,8 +367,8 @@ class Game(object):
               child_laser = laser.update(board_checking, self.Pts)
             if laser_solved:    #laser object returns a boolean after checking if all points are met       
                 print('solved')
-                solution = board
-                return solution
+                self.solution = board
+                save_board()
                 break
 
 
@@ -391,3 +378,6 @@ class Game(object):
 #read board and dispose of non-pertanent lines
 # B = Game("braid_5.input")
 
+BB = Game("diagonal_8.input")
+print(BB)
+A = BB.run()
