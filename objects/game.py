@@ -106,6 +106,7 @@ class Game(object):
             laser[i] = np.fromstring(lasers[i],dtype=int,sep=' ')
         for i in range(len(Points)):
             Points[i] = np.fromstring(P[i],dtype = int,sep=' ')
+        print(Points)
         self.board = board
         self.num_type_blocks = num_blocks
         self.points = Points
