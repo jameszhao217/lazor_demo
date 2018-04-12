@@ -25,3 +25,5 @@ class Block(object):
             Cont = True
         self.reflect = Reflect
         self.continues = Cont
+A = Block('3')
+print(A.reflect)
