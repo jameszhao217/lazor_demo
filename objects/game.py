@@ -39,21 +39,25 @@ class Game(object):
         self.fname = fptr
         self.read(fptr)
         
-        self.generate_boards()
-        self.available_space
-        self.boards
-        self.partitions
-        self.rows
-        self.cols
+#        self.available_space
+#        self.boards
+#        self.partitions
+#        self.rows
+#        self.cols
         
 #        self.set_board(self.boards)
 
-        self.board #matrix representing the board (A,B,C,x,o)
-        self.num_type_blocks # number of each type of block [A,B,C]
-        self.points #points that need to be intersected with the laser
-        self.laser #laser coordinates
+#        self.board #matrix representing the board (A,B,C,x,o)
+#        self.num_type_blocks # number of each type of block [A,B,C]
+#        self.points #points that need to be intersected with the laser
+#        self.laser #laser coordinates
 
-
+    def __str__(self):
+        a = 'this is the board read in'+'\n'
+        b = '\n'.join(self.display_board)
+        display=a+b
+        return display
+        
     # DO SOMETHING HERE SO WE CAN PRINT A REPRESENTATION OF GAME!
 
     def read(self, fptr):
@@ -83,6 +87,7 @@ class Game(object):
                 lines.append(line)
         # find size of board create empty matrix rows x collumns
         collumns = []
+        display_board = []
         rows = 0
         characters = ['x','o','A','B','C']
         #create empty numpy array of the size of the board
@@ -90,6 +95,7 @@ class Game(object):
              if line[0] in characters and line[4] in characters:
                rows+=1
                collumns.append(line.count('o') + line.count('x')+line.count('A')+line.count('B')+line.count('C'))
+               display_board.append(line)
              else: break
         board = np.empty((rows,max(collumns)),dtype=str)
         #build board with the correct string
@@ -120,9 +126,7 @@ class Game(object):
         self.num_type_blocks = num_blocks
         self.points = Pts
         self.laser = laser
-        
-        
-        
+        self.display_board = display_board        
     def generate_boards(self):
 
         '''
@@ -266,7 +270,6 @@ class Game(object):
                         board_draft.append(self.board[x,y])
             boards.append(board_draft)
 
-#        print(boards)
         self.boards = boards
         return boards
 
@@ -291,15 +294,11 @@ class Game(object):
 
             None
         '''
-#        print('*****')        
-#        print(board)   
-#        print(self.rows)
-#        print(self.cols)
+
         
         AAA = np.array(board)         
         BBB = np.reshape(AAA, (self.rows, self.cols))      
                 
-#        print('BBB1',BBB)
         
         b0 = Block('0')
         b1 = Block('1')
@@ -361,7 +360,6 @@ class Game(object):
 
             None
         '''
-        print('hello world')
         # Get all boards
         print("Generating all the boards..."),
         sys.stdout.flush()
@@ -377,7 +375,7 @@ class Game(object):
             board_checking = self.set_board(board)
             # MAYBE MORE CODE HERE?
             # LOOP THROUGH LASERS
-            for j, laser in enumerate(current_lasers):
+            for j, laser in enumerate(current_lasers): 
               child_laser = None
               child_laser = laser.update(board_checking, self.Pts)
             if laser_solved:    #laser object returns a boolean after checking if all points are met       
@@ -393,4 +391,3 @@ class Game(object):
 #read board and dispose of non-pertanent lines
 # B = Game("braid_5.input")
 
-BB = Game("diagonal_8.input")
