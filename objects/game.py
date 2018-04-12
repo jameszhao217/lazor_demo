@@ -3,6 +3,8 @@ import copy
 import itertools
 import numpy as np
 from block import Block
+#from laser import Laser
+from point import Point
 
 from itertools import permutations
 
@@ -44,7 +46,7 @@ class Game(object):
         self.rows
         self.cols
         
-        self.set_board(self.boards)
+#        self.set_board(self.boards)
 
         self.board #matrix representing the board (A,B,C,x,o)
         self.num_type_blocks # number of each type of block [A,B,C]
@@ -90,7 +92,7 @@ class Game(object):
                collumns.append(line.count('o') + line.count('x')+line.count('A')+line.count('B')+line.count('C'))
              else: break
         board = np.empty((rows,max(collumns)),dtype=str)
-        #build board with the ecorrect string
+        #build board with the correct string
         for i in range(rows):
             a = lines[i]
             for j in range(max(collumns)):
@@ -106,16 +108,17 @@ class Game(object):
             elif a[0] == "L":lasers.append(a[2::].strip('\n'))
             elif a[0] == "P":P.append(a[2::].strip('\n'))
         laser = np.zeros((len(lasers),4))
-        Points = np.zeros((len(P),2))
+        Ps = np.zeros((len(P),2))
+        Pts = np.zeros((len(P),1),dtype=Point)
         for i in range(len(laser)):
             laser[i] = np.fromstring(lasers[i],dtype=int,sep=' ')
-        for i in range(len(Points)):
-            Points[i] = np.fromstring(P[i],dtype = int,sep=' ')
-
-        
+        for i in range(len(Ps)):
+            Ps[i] = np.fromstring(P[i],dtype = int,sep=' ')
+            B = Point(Ps[i])
+            Pts[i] = B
         self.board = board
         self.num_type_blocks = num_blocks
-        self.points = Points
+        self.points = Pts
         self.laser = laser
         
         
@@ -156,7 +159,7 @@ class Game(object):
         b_cols = len(self.board[0])
         self.rows = b_rows
         self.cols = b_cols
-        print (self.board)
+ 
 
         ### Obtain the number of available spaces from board read above
         count_zeros = 0
@@ -201,7 +204,6 @@ class Game(object):
             list_block = list_block + '4' #list_block.append(300 + i)
         for i in range(0, N_Blocks_C):
             list_block = list_block + '2' # list_block.append(100 + i)           
-        print(list_block)
         
         ### Functions used to produce internal permutations
         def unique_perms(series):
@@ -209,8 +211,7 @@ class Game(object):
         
         ### Obtain the internal permutations at each board partition
         partitions_blocks = sorted(unique_perms(list_block))
-        print partitions_blocks
-        print(len(partitions_blocks))
+
 
         ### Generate the Structure of boards, which will be filled in with 
         # internal permuations at each blocks assignment
@@ -218,11 +219,7 @@ class Game(object):
         for i in range(0, len(partitions)): #len(partitions)):
             for j in range(0, len(partitions_blocks)):
                 ppp_draft.append(partitions[i])
-        print(len(partitions))
-        print(len(partitions_blocks))
-        print(len(ppp_draft))
-        
-        print('#########################')
+
 
         ####################################################
         ### Assign Internal Permutations into Partitions ###
@@ -295,15 +292,15 @@ class Game(object):
 
             None
         '''
-        print('*****')        
-        print(board)   
-        print(self.rows)
-        print(self.cols)
+#        print('*****')        
+#        print(board)   
+#        print(self.rows)
+#        print(self.cols)
         
         AAA = np.array(board)         
         BBB = np.reshape(AAA, (self.rows, self.cols))      
                 
-        print('BBB1',BBB)
+#        print('BBB1',BBB)
         
         b0 = Block('0')
         b1 = Block('1')
@@ -330,9 +327,9 @@ class Game(object):
                     BBB[i,j] = b0
                 else:                   # Not Available
                     BBB[i,j] = b1
-        print(len(boards))
-        print('BBB2',BBB)
-                
+        return BBB
+    
+        
         
         
         
@@ -378,26 +375,20 @@ class Game(object):
         # Loop through the boards, and "play" them
         for b_index, board in enumerate(boards):
             # Set board
-            self.set_board(board)
-
+            board_checking = self.set_board(board)
             # MAYBE MORE CODE HERE?
             b = True
             # LOOP THROUGH LASERS
             for j, laser in enumerate(current_lasers):
               child_laser = None
-              child_laser = laser.update(self.board, self.points)
-              print(j)
-              if b:
-                  break
-            print('solved')
-            break
-        print('out of loop')
+              child_laser = laser.update(board_checking, self.Pts)
+            if laser.solved:           
+                print('solved')
+                solution = board
+                return solution
+                break
 
 
-            # MAYBE MORE CODE HERE?
-            # some_file.py
-
-            # CHECKS HERE
             
             
             
