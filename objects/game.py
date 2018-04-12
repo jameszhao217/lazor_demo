@@ -36,7 +36,12 @@ class Game(object):
         '''
         self.fname = fptr
         self.read(fptr)
-        
+   
+        self.board #matrix representing the board (A,B,C,x,o)
+        self.num_type_blocks # number of each type of block [A,B,C]
+        self.points #points that need to be intersected with the laser
+        self.laser #laser coordinates
+     
         self.generate_boards()
         self.available_space
         self.boards
@@ -44,12 +49,9 @@ class Game(object):
         self.rows
         self.cols
         
-        self.set_board(self.boards)
+        self.run()        
 
-        self.board #matrix representing the board (A,B,C,x,o)
-        self.num_type_blocks # number of each type of block [A,B,C]
-        self.points #points that need to be intersected with the laser
-        self.laser #laser coordinates
+        self.save_board()
 
 
     # DO SOMETHING HERE SO WE CAN PRINT A REPRESENTATION OF GAME!
@@ -111,11 +113,7 @@ class Game(object):
             laser[i] = np.fromstring(lasers[i],dtype=int,sep=' ')
         for i in range(len(Points)):
             Points[i] = np.fromstring(P[i],dtype = int,sep=' ')
-<<<<<<< HEAD
-        print(Points)
-=======
-        
->>>>>>> terrence.py
+
         self.board = board
         self.num_type_blocks = num_blocks
         self.points = Points
@@ -339,15 +337,10 @@ class Game(object):
         print (BBB)
         print BBB[4][3].reflect
         
-        # YOUR CODE HERE 
-        
-        
-        
-        
-        
-        pass
+
 
     def save_board(self):
+        
         '''
         Difficulty 2
 
@@ -358,8 +351,15 @@ class Game(object):
 
             None
         '''
-        # YOUR CODE HERE
-        pass
+        
+        # Write the solution board to an external file named "solution.txt"   
+        board_draft_solution = self.solution   
+        board_solution = np.array(board_draft_solution)
+        board_sol_arranged = np.reshape(board_solution, (self.rows, self.cols))
+        np.savetxt('solution.txt', board_sol_arranged, fmt='%s', delimiter=',')
+        
+        
+
 
     def run(self):
         '''
@@ -402,7 +402,6 @@ class Game(object):
             break
         print('out of loop')
 
-<<<<<<< HEAD
             # MAYBE MORE CODE HERE?
             # some_file.py
 
@@ -411,12 +410,6 @@ class Game(object):
             
             
 #read board and dispose of non-pertanent lines
-# B = Game("braid_5.input")
 
-BB = Game("diagonal_8.input")
-=======
-#read board and dispose of non-pertanent lines
-
->>>>>>> terrence.py
 
 B = Game('diagonal_8.input')
