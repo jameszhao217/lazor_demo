@@ -380,6 +380,6 @@ class Game(object):
 
 # B = Game("braid_5.input")
 
-BB = Game("diagonal_8.input")
+BB = Game("../boards/diagonal_8.input")
 print(BB)
 A = BB.run()
