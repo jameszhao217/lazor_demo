@@ -95,6 +95,7 @@ class Game(object):
             laser[i] = np.fromstring(lasers[i],dtype=int,sep=' ')
         for i in range(len(Points)):
             Points[i] = np.fromstring(P[i],dtype = int,sep=' ')
+        
         self.board = board
         self.num_type_blocks = num_blocks
         self.points = Points
@@ -209,20 +210,19 @@ class Game(object):
             self.set_board(board)
 
             # MAYBE MORE CODE HERE?
-
+            b = True
             # LOOP THROUGH LASERS
             for j, laser in enumerate(current_lasers):
               child_laser = None
               child_laser = laser.update(self.board, self.points)
+              print(j)
+              if b:
+                  break
+            print('solved')
+            break
+        print('out of loop')
 
-            # MAYBE MORE CODE HERE?
-            # some_file.py
-
-            # CHECKS HERE
 #read board and dispose of non-pertanent lines
-B = Game("diagonal_8.input")
 
 
-
-       
-
+B = Game('diagonal_8.input')
