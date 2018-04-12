@@ -335,10 +335,9 @@ class Game(object):
         board_draft_solution = self.solution   
         board_solution = np.array(board_draft_solution)
         board_sol_arranged = np.reshape(board_solution, (self.rows, self.cols))
+        print(board_sol_arranged)
         np.savetxt('solution.txt', board_sol_arranged, fmt='%s', delimiter=',')
         
-        
-
 
     def run(self):
         '''
