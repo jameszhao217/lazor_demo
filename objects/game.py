@@ -2,6 +2,7 @@ import sys
 import copy
 import itertools
 import numpy as np
+from block import Block
 
 from itertools import permutations
 
@@ -40,6 +41,10 @@ class Game(object):
         self.available_space
         self.boards
         self.partitions
+        self.rows
+        self.cols
+        
+        self.set_board(self.boards)
 
         self.board #matrix representing the board (A,B,C,x,o)
         self.num_type_blocks # number of each type of block [A,B,C]
@@ -133,14 +138,14 @@ class Game(object):
 
         ### Obtain the number of each type of blocks from num_type_blocks
 
-        N_Blocks_A = 5 #int(self.num_type_blocks[0])   
-        # -----> Numbered 2 for laser.py
-        
-        N_Blocks_B = 0 #int(self.num_type_blocks[1])
+        N_Blocks_A = int(self.num_type_blocks[0])   
         # -----> Numbered 3 for laser.py
         
-        N_Blocks_C = 0 #int(self.num_type_blocks[2])
-        # -----> Numbered 1 for laser.py
+        N_Blocks_B = int(self.num_type_blocks[1])
+        # -----> Numbered 4 for laser.py
+        
+        N_Blocks_C = int(self.num_type_blocks[2])
+        # -----> Numbered 2 for laser.py
         
         N_Blocks = N_Blocks_A + N_Blocks_B + N_Blocks_C
         # Total Number of Blocks from the input file
@@ -148,6 +153,8 @@ class Game(object):
         ### Dimension of Board
         b_rows = len(self.board)
         b_cols = len(self.board[0])
+        self.rows = b_rows
+        self.cols = b_cols
         print (self.board)
 
         ### Obtain the number of available spaces from board read above
@@ -188,11 +195,11 @@ class Game(object):
         ### Make a list of all types of block
         list_block = ''
         for i in range(0, N_Blocks_A):
-            list_block = list_block + '2' #list_block.append(200 + i)
+            list_block = list_block + '3' #list_block.append(200 + i)
         for i in range(0, N_Blocks_B):
-            list_block = list_block + '3' #list_block.append(300 + i)
+            list_block = list_block + '4' #list_block.append(300 + i)
         for i in range(0, N_Blocks_C):
-            list_block = list_block + '1' # list_block.append(100 + i)           
+            list_block = list_block + '2' # list_block.append(100 + i)           
         print(list_block)
         
         ### Functions used to produce internal permutations
@@ -207,7 +214,7 @@ class Game(object):
         ### Generate the Structure of boards, which will be filled in with 
         # internal permuations at each blocks assignment
         ppp_draft = []
-        for i in range(0, 2): #len(partitions)):
+        for i in range(0, len(partitions)): #len(partitions)):
             for j in range(0, len(partitions_blocks)):
                 ppp_draft.append(partitions[i])
         print(len(partitions))
@@ -242,7 +249,7 @@ class Game(object):
             pointer += 1
             boards_final.append(boards_element)
                 
-        print(boards_final)
+#        print(boards_final)
 
         ##############################################
         ### FINALLY, Assign partitions into boards ###
@@ -261,7 +268,7 @@ class Game(object):
                         board_draft.append(self.board[x,y])
             boards.append(board_draft)
 
-        print(boards)
+#        print(boards)
         self.boards = boards
         
         return boards
@@ -269,7 +276,8 @@ class Game(object):
 
 
 
-    def set_board(self, board):
+    def set_board(self, boards):
+        
         '''
         Difficulty 2
 
@@ -286,7 +294,55 @@ class Game(object):
 
             None
         '''
+        print('*****')        
+        print(boards)   
+        print(self.rows)
+        print(self.cols)
+        
+        for i in range(len(boards)):         
+            AAA = np.array(boards[i])         
+            for j in range(len(boards[i])):            
+                BBB = np.reshape(AAA, (self.rows, self.cols))      
+                
+        print(BBB)
+        
+        b0 = Block('0')
+        b1 = Block('1')
+        b2 = Block('2')
+        b3 = Block('3')
+        b4 = Block('4')
+        
+        BBB = np.array(BBB, dtype=Block)
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if BBB[i,j] == '3':     # TYPE A
+                    BBB[i,j] = b3
+                elif BBB[i,j] == '4':   # TYPE B
+                    BBB[i,j] = b4
+                elif BBB[i,j] == '2':   # TYPE C
+                    BBB[i,j] = b2
+                elif BBB[i,j] == 'A':   # TYPE A
+                    BBB[i,j] = b3
+                elif BBB[i,j] == 'B':   # TYPE B
+                    BBB[i,j] = b4
+                elif BBB[i,j] == 'C':   # TYPE C
+                    BBB[i,j] = b2
+                elif BBB[i,j] == '0':   # Available
+                    BBB[i,j] = b0
+                else:                   # Not Available
+                    BBB[i,j] = b1
+               
+
+        print "X"
+        print (BBB)
+        print BBB[4][3].reflect
+        
         # YOUR CODE HERE 
+        
+        
+        
+        
+        
         pass
 
     def save_board(self):
@@ -346,8 +402,7 @@ class Game(object):
             
             
 #read board and dispose of non-pertanent lines
-B = Game("braid_5.input")
+# B = Game("braid_5.input")
 
 BB = Game("diagonal_8.input")
-
 
