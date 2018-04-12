@@ -268,7 +268,6 @@ class Game(object):
 
 #        print(boards)
         self.boards = boards
-        
         return boards
 
 
@@ -377,12 +376,11 @@ class Game(object):
             # Set board
             board_checking = self.set_board(board)
             # MAYBE MORE CODE HERE?
-            b = True
             # LOOP THROUGH LASERS
             for j, laser in enumerate(current_lasers):
               child_laser = None
               child_laser = laser.update(board_checking, self.Pts)
-            if laser.solved:           
+            if laser_solved:    #laser object returns a boolean after checking if all points are met       
                 print('solved')
                 solution = board
                 return solution
