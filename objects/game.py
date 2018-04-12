@@ -111,7 +111,11 @@ class Game(object):
             laser[i] = np.fromstring(lasers[i],dtype=int,sep=' ')
         for i in range(len(Points)):
             Points[i] = np.fromstring(P[i],dtype = int,sep=' ')
+<<<<<<< HEAD
         print(Points)
+=======
+        
+>>>>>>> terrence.py
         self.board = board
         self.num_type_blocks = num_blocks
         self.points = Points
@@ -388,12 +392,19 @@ class Game(object):
             self.set_board(board)
 
             # MAYBE MORE CODE HERE?
-
+            b = True
             # LOOP THROUGH LASERS
             for j, laser in enumerate(current_lasers):
               child_laser = None
               child_laser = laser.update(self.board, self.points)
+              print(j)
+              if b:
+                  break
+            print('solved')
+            break
+        print('out of loop')
 
+<<<<<<< HEAD
             # MAYBE MORE CODE HERE?
             # some_file.py
 
@@ -405,4 +416,9 @@ class Game(object):
 # B = Game("braid_5.input")
 
 BB = Game("diagonal_8.input")
+=======
+#read board and dispose of non-pertanent lines
 
+>>>>>>> terrence.py
+
+B = Game('diagonal_8.input')
