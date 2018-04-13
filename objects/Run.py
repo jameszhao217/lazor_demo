@@ -366,32 +366,33 @@ class Game(object):
         print("Playing boards...") 
         sys.stdout.flush()
         # Loop through the boards, and "play" them
-######### Test all boards ###########
-        for b_index, board in enumerate(boards):
+# ######### Test all boards ###########
+#         for b_index, board in enumerate(boards):
 
-            board_checking = self.set_board(board)
-            Test_1 = Laser(board_checking, self.points)
-            laser_solved = Test_1.laser_run(self.laser)
-              # print(laser_solved)
+#             board_checking = self.set_board(board)
+#             Test_1 = Laser(board_checking, self.points)
+#             laser_solved = Test_1.laser_run(self.laser)
+#             # print('New board')
+#               # print(laser_solved)
 
-            if laser_solved:    #laser object returns a boolean after checking if all points are met       
-                print('solved')
-                self.solution = board
-                save_board()
-                break
+#             if laser_solved:    #laser object returns a boolean after checking if all points are met       
+#                 print('solved')
+#                 self.solution = board
+#                 self.save_board()
+#                 break
 #######################################
 
 ######## Test one board ###############
+        board = [0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 3, 0, 0, 3, 0]
+        board_checking = self.set_board(board)
+        Test_1 = Laser(board_checking, self.points)
+        laser_solved = Test_1.laser_run(self.laser)
 
-        # board_checking = self.set_board(boards[23])
-        # Test_1 = Laser(board_checking, self.points)
-        # laser_solved = Test_1.laser_run(self.laser)
-
-        # if laser_solved:    #laser object returns a boolean after checking if all points are met       
-        #     print('solved')
-        #     self.solution = board
-        #     save_board()
-        #         # break        
+        if laser_solved:    #laser object returns a boolean after checking if all points are met       
+            print('solved')
+            self.solution = board
+            save_board()
+   
 #######################################
 
 #read board and dispose of non-pertanent lines
@@ -415,29 +416,23 @@ class Laser:
     def laser_move(self, laser):
         p_laser, d_laser = np.array([[laser[0], laser[1]]]), np.array([[laser[2], laser[3]]])
         Next_p = p_laser + d_laser
-        # print(Next_p)
         for i, P in enumerate(self.target_P):
             if P[0].check_intersection(Next_p[0]):
                 self.target_P = np.delete(self.target_P, i, 0)
-
-        # if Next_p[0][0] >= self.lenx or Next_p[0][0] <= 0 or Next_p[0][1] >= self.leny or Next_p[0][1] <= 0:
-            # return Next_p, D_laser, False
-        try:
-            if Next_p[0][0] % 2 == 0: # check whether the bar is at sides
-                check_block = self.board[int((Next_p[0][1] - 1) / 2)][int((Next_p[0][0] + d_laser[0][0] - 1) / 2)]
-                side_bar = True
-            else:
-                check_block = self.board[int((Next_p[0][1] - d_laser[0][1] - 1) / 2)][int((Next_p[0][0] - 1) / 2)]
-                side_bar = False            
-        except IndexError:
+        if Next_p[0][0] >= self.lenx or Next_p[0][0] <= 0 or Next_p[0][1] >= self.leny or Next_p[0][1] <= 0:
             return Next_p, d_laser, False
+        
+        if Next_p[0][0] % 2 == 0: # check whether the bar is at sides
+            check_block = self.board[int((Next_p[0][1] - 1) / 2)][int((Next_p[0][0] + d_laser[0][0] - 1) / 2)]
+            side_bar = True
+        else:
+            check_block = self.board[int((Next_p[0][1] + d_laser[0][1] - 1) / 2)][int((Next_p[0][0] - 1) / 2)]
+            side_bar = False            
 
         if check_block.reflect:
             if check_block.continues:
-                # print('refract')
                 return np.vstack([Next_p, Next_p]), np.vstack([d_laser, self.laser_rflc(d_laser, side_bar)]), True # Refractive
             else:
-                # print('reflect')
                 return Next_p, self.laser_rflc(d_laser, side_bar), True # Reflective
         else:
             if check_block.continues:
@@ -449,28 +444,23 @@ class Laser:
         i = 0
         laser_route = lasers
         while i < len(lasers):
-            # print(len(lasers))     
             laser_cont = True
             laser = np.array([lasers[i]])
             while laser_cont:
                 P_laser, D_laser, laser_cont = self.laser_move(laser[0])
-                # print(laser_cont)
-                # print(P_laser, D_laser)
                 laser = np.hstack((P_laser, D_laser))
-                # print(laser)
-                Repeat_laser = np.equal(laser, laser_route)
-                for j, Repeat_check in enumerate(Repeat_laser):
-                    if Repeat_check.all():
-                        laser = np.delete(laser, j, 0)
+                laser_route = np.vstack([laser_route, laser[0]])
+                if len(laser_route) >= 100:
+                    laser_cont = False
+                    break
                 if len(laser) == 2:
-                    np.vstack([lasers, laser[1]])
-                # print(len(self.target_P))
-
+                    lasers = np.vstack([lasers, laser[1]])
             i += 1
         if len(self.target_P) == 0:
             return True
         return False
 
-BB = Game("diagonal_8.input")
+BB = Game("vertices_2.input")
 print(BB)
 A = BB.run()
+
