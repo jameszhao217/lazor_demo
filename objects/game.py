@@ -50,13 +50,19 @@ class Game(object):
                collumns.append(line.count('o') + line.count('x')+line.count('A')+line.count('B')+line.count('C'))
                display_board.append(line)
              else: break
+        #B   o   o   o
+        #o o B
+
         board = np.empty((rows,max(collumns)),dtype=str)
         #build board with the correct string
+        spacing=4
+        if display_board[0][2] in characters:
+            spacing = 2
         for i in range(rows):
             a = lines[i]
             for j in range(max(collumns)):
-                if a[j*4] in characters:
-                    board[i,j] = a[j*4]
+                if a[j*spacing] in characters:
+                    board[i,j] = a[j*spacing]
                 else:
                     print('there is an error with reading in the board')
         # assemble vector of points, lasers, blocks
@@ -337,6 +343,9 @@ class Game(object):
                 save_board()
                 break
 
+<<<<<<< HEAD
 BB = Game("../boards/vertices_2.input")
 print(BB)
 A = BB.run()
+=======
+>>>>>>> master
