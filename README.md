@@ -6,22 +6,22 @@
 
 ```markdown
 ## Group Members:
-Moran, Terrence: tpm92
-Zhao, Mingjie: mz467
-Zhong, Ren: rz346
+Moran, Terrence: tpm92@cornell.edu
+Zhao, Mingjie: mz467@cornell.edu
+Zhong, Ren: rz346@cornell.edu
 ```
 
 ```markdown
 ## Brief Description
 Our code automatically find solutions to the "Lazor" game on androids and iphones. It consists of the following objects:
 
-1. Game Object
+1. _Game_ Object
 
-2. Block Object
+2. _Block_ Object
 
-3. Point Object
+3. _Point_ Object
 
-4. Laser Object
+4. _Laser_ Object
 
 
 
@@ -34,18 +34,6 @@ Our code automatically find solutions to the "Lazor" game on androids and iphone
 
 
 
-```markdown
+Please contact us by the listed emails if you have any questions.
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-
-
-
-
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-
+Thank you very much! 
