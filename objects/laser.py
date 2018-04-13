@@ -1,116 +1,76 @@
-# 0: available space
-# 1: unavailable space
-# 2: refractive block
-# 3: reflective block
-# 4: opaque block
-# 5: outbound
- 
-
-block_fail = [[0., 2., 4., 0.],
-        [3., 2., 4., 0.],
-        [0., 1., 3., 0.],
-        [0., 0., 0., 0.]]
-
-block_success = [[0., 2., 4., 0.],
-         [3., 2., 1., 0.],
-         [0., 1., 3., 0.],
-         [0., 0., 0., 0.]]
-
-# board_fail = [[5., 5., 5., 5., 5., 5., 5., 5., 5.],
-#               [5., 0., 2., 2., 4., 4., 4., 0., 5.],
-#               [5., 3., 0., 2., 0., 4., 0., 0., 5.],
-#               [5., 3., 3., 2., 4., 4., 4., 0., 5.],
-#               [5., 3., 0., 2., 0., 4., 0., 0., 5.],
-#               [5., 0., 1., 1., 3., 3., 3., 0., 5.],
-#               [5., 0., 0., 1., 0., 3., 0., 0., 5.],
-#               [5., 0., 0., 0., 0., 0., 0., 0., 5.],
-#               [5., 5., 5., 5., 5., 5., 5., 5., 5.]]
-
-# board_succ = [[5., 5., 5., 5., 5., 5., 5., 5., 5.],
-#               [5., 0., 2., 2., 4., 4., 4., 0., 5.],
-#               [5., 3., 0., 2., 0., 4., 0., 0., 5.],
-#               [5., 3., 3., 2., 2., 0., 0., 0., 5.],
-#               [5., 3., 0., 2., 0., 3., 0., 0., 5.],
-#               [5., 0., 1., 1., 3., 3., 3., 0., 5.],
-#               [5., 0., 0., 1., 0., 3., 0., 0., 5.],
-#               [5., 0., 0., 0., 0., 0., 0., 0., 5.],
-#               [5., 5., 5., 5., 5., 5., 5., 5., 5.]]
-
-lazer = [(1, 9, 1, -1)]
+from point import Point
+import numpy as np
 
 class Laser:
-  '''
-  The Laser.  We need to store both the starting position and direction of
-  the laser.
-  '''
-  def __init__(self, Board, laser, Target_P):
-    '''
-    Difficulty 1
 
-    DONT FORGET TO COMMENT!
-    '''
-    # MORE
-    # Difficulty 4        
-    self.board = Board           # import Board matrix
-    self.lenx, self.leny = 2 * len(Board[0]), 2 * len(Board)
-    self.P_laser = [(laser_P[0], laser_P[1]) for laser_P in laser]    # import laser starting point
-    self.D_laser = [(laser_D[2], laser_D[3]) for laser_D in laser]    # import laser starting direction
-    self.target_P = Target_P
+    def __init__(self, Board, Target_P):    
+        self.board = Board           # import Board matrix
+        self.lenx = 2 * len(Board[0])
+        self.leny = 2 * len(Board)
+        self.target_P = Target_P
 
-  def laser_rflc(side_bar):
-    if side_bar:
-      D_laser = tuple(x * y for x, y in zip(D_laser, (-1., 1.)))
-    else:
-      D_laser = tuple(x * y for x, y in zip(D_laser, (1., -1.)))  
-    return D_laser
+    def laser_rflc(self, in_laser, side_bar):
+        if side_bar:
+            ref_laser = np.array([[-in_laser[0][0], in_laser[0][1]]])
+        else:
+            ref_laser = np.array([[in_laser[0][0], -in_laser[0][1]]])
+        return ref_laser
 
+    def laser_move(self, laser):
+        p_laser, d_laser = np.array([[laser[0], laser[1]]]), np.array([[laser[2], laser[3]]])
+        Next_p = p_laser + d_laser
+        # print(Next_p)
+        for i, P in enumerate(self.target_P):
+            if P[0].check_intersection(Next_p[0]):
+                self.target_P = np.delete(self.target_P, i, 0)
 
-  def laser_move(self, P_laser, D_laser):
-    Next_x, Next_y = tuple(x + y for x, y in zip(P_laser, D_laser))
+        # if Next_p[0][0] >= self.lenx or Next_p[0][0] <= 0 or Next_p[0][1] >= self.leny or Next_p[0][1] <= 0:
+            # return Next_p, D_laser, False
+        try:
+            if Next_p[0][0] % 2 == 0: # check whether the bar is at sides
+                check_block = self.board[int((Next_p[0][1] - 1) / 2)][int((Next_p[0][0] + d_laser[0][0] - 1) / 2)]
+                side_bar = True
+            else:
+                check_block = self.board[int((Next_p[0][1] - d_laser[0][1] - 1) / 2)][int((Next_p[0][0] - 1) / 2)]
+                side_bar = False            
+        except IndexError:
+            return Next_p, d_laser, False
 
-    if Next_x >= self.lenx or Next_x <= 0 or Next_y >= self.leny or Next_y <= 0:
-      return [(Next_x, Next_y) + D_laser], False
+        if check_block.reflect:
+            if check_block.continues:
+                # print('refract')
+                return np.vstack([Next_p, Next_p]), np.vstack([d_laser, self.laser_rflc(d_laser, side_bar)]), True # Refractive
+            else:
+                # print('reflect')
+                return Next_p, self.laser_rflc(d_laser, side_bar), True # Reflective
+        else:
+            if check_block.continues:
+                return Next_p, d_laser, True  # Space
+            else:
+                return Next_p, d_laser, False # Opaque
 
-    if Next_x % 2 == 0: # check whether the bar is at sides 
-      check_block = self.board[(Next_x + D_laser[0] + 1) / 2][(Next_y + 1) / 2]
-      side_bar = True
-    else:
-      check_block = self.board[(Next_x + 1) / 2][(Next_y + D_laser[1] + 1) / 2]
-      side_bar = False
+    def laser_run(self, lasers): # finish a board
+        i = 0
+        laser_route = lasers
+        while i < len(lasers):
+            # print(len(lasers))     
+            laser_cont = True
+            laser = np.array([lasers[i]])
+            while laser_cont:
+                P_laser, D_laser, laser_cont = self.laser_move(laser[0])
+                # print(laser_cont)
+                # print(P_laser, D_laser)
+                laser = np.hstack((P_laser, D_laser))
+                # print(laser)
+                Repeat_laser = np.equal(laser, laser_route)
+                for j, Repeat_check in enumerate(Repeat_laser):
+                    if Repeat_check.all():
+                        laser = np.delete(laser, j, 0)
+                if len(laser) == 2:
+                    np.vstack([lasers, laser[1]])
+                # print(len(self.target_P))
 
-    if check_block == 0 or 1: # Available and unavailable spaces
-      return [(Next_x, Next_y) + D_laser], True
-    elif check_block == 2:    # Refractive block
-      return [(Next_x, Next_y) + D_laser, (Next_x, Next_y) + laser_rflc(side_bar)], True
-    elif check_block == 3:    # Reflective block
-      return [(Next_x, Next_y) + laser_rflc(side_bar)], True             
-    elif check_block == 4:    # Opaque block (else?)
-      return [(Next_x, Next_y) + D_laser], False                   
-
-  def laser_ray(self, P, D, laser_route): # finish a laser ray
-    laser_cont = True
-    while laser_cont:
-      Next_laser, laser_cont = laser_move(P, D)
-      for i in Next_laser:
-
-      # laser_route += Next_laser[0]
-      # if len(Next_laser) == 2:
-      #     self.P_laser += Next_laser[1]
-      # for i in Next_laser:
-      #     if i in laser_route:
-      #         laser_cont = False
-    return laser_route
-
-  def laser_board(self, P_laser_all, D_laser_all): # run laser on board and decide if it has passed all desiered points
-    # for i in range(len(self.P_laser)):
-
-
-
-
-
-  # 1. create matrix 
-  # 2. find all points laser travel through 
-  # 3. check if all desired points has been covered (Maybe should be in Game.py)
-
-
-
+            i += 1
+        if len(self.target_P) == 0:
+            return True
+        return False
