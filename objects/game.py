@@ -338,7 +338,3 @@ class Game(object):
                 save_board()
                 break
 
-BB = Game("diagonal_8.input")
-#BB = Game("showstopper_2.input")
-print(BB)
-A = BB.run()
