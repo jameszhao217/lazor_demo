@@ -15,7 +15,12 @@ Zhong, Ren: rz346@cornell.edu
 
 ```markdown
 ## Brief Description
-Our code automatically find solutions to the "Lazor" game on androids and iphones. It reads in an input file to obtain the board layout to obtain the number and types of blocks, the number of points that needs to go through, and the position and direction of the laser beam. Then, it generates all the potential variations of placing blocks onto this board, uses laser to test each one of the variations, finds one board that satisfies all the points, and then save that solution into a text file. 
+Our code automatically find solutions to the "Lazor" game on androids and iphones. 
+It reads in an input file to obtain the board layout to obtain the number and types of blocks, 
+the number of points that needs to go through, and the position and direction of the laser beam. 
+Then, it generates all the potential variations of placing blocks onto this board, 
+uses laser to test each one of the variations, finds one board that satisfies all the points, 
+and then save that solution into a text file. 
 
 Our code consists of the following objects:
 1. _Game_ Object
