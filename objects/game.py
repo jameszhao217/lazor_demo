@@ -209,7 +209,7 @@ class Game(object):
             pointer += 1
             boards_final.append(boards_element)
                 
-#        print(boards_final)
+        print(boards_final[1])
 
         ##############################################
         ### FINALLY, Assign partitions into boards ###
@@ -229,6 +229,10 @@ class Game(object):
             boards.append(board_draft)
 
         self.boards = boards
+        print((boards[0]))
+        print(type(boards[0]))
+        print(type(boards[0][1]))
+        
         return boards
 
 
@@ -254,9 +258,10 @@ class Game(object):
         '''
 
         
-        AAA = np.array(board)         
+        AAA = np.array(board) 
+        print(AAA)
         BBB = np.reshape(AAA, (self.rows, self.cols))      
-                
+        print(BBB)
         
         b0 = Block('0')
         b1 = Block('1')
@@ -267,9 +272,9 @@ class Game(object):
         BBB = np.array(BBB, dtype=Block)
         for i in range(self.rows):
             for j in range(self.cols):
-                if BBB[i,j] == '3':     # TYPE A
+                if BBB[i,j] == '3' or 3:     # TYPE A
                     BBB[i,j] = b3
-                elif BBB[i,j] == '4':   # TYPE B
+                elif BBB[i,j] == '4' :   # TYPE B
                     BBB[i,j] = b4
                 elif BBB[i,j] == '2':   # TYPE C
                     BBB[i,j] = b2
@@ -332,6 +337,6 @@ class Game(object):
                 save_board()
                 break
 
-BB = Game("../boards/diagonal_8.input")
+BB = Game("../boards/vertices_2.input")
 print(BB)
 A = BB.run()
