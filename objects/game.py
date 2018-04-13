@@ -13,59 +13,25 @@ from itertools import permutations
 
 
 class Game(object):
-    '''
-    The game grid.  Here we read in some user input, assign all our blocks,
-    lasers, and points, determine all the possible different combinations
-    of boards we could make, and then run through them all to try and find
-    the winning one.
-    '''
-
+    # initialize object
     def __init__(self, fptr):
-        '''
-        Difficulty 1
 
-        Initialize our game.
-
-        **Parameters**
-
-            fptr: *str*
-                The file name of the input board to solve.
-
-        **Returns**
-
-            game: *Game*
-                This game object.
-        '''
         self.fname = fptr
         self.read(fptr)
-        
+    # so the board read in can be printed
     def __str__(self):
         a = 'this is the board read in'+'\n'
         b = '\n'.join(self.display_board)
         display=a+b
         return display
-        
-    # DO SOMETHING HERE SO WE CAN PRINT A REPRESENTATION OF GAME!
-
+    #read in the board 
     def read(self, fptr):
-        '''
-        Difficulty 3
 
-        Some function that reads in a file, and generates the internal board.
-
-        **Parameters**
-
-            fptr: *str*
-                The file name of the input board to solve.
-
-        **Returns**
-
-            None
-        '''
-        lines = [] # relevant lines
-        P = [] #laser points
-        lasers = []
-        num_blocks = np.zeros((3,1))
+        lines = [] # relevant lines 
+        P = [] # points coordinates
+        lasers = [] # laser direction and position
+        num_blocks = np.zeros((3,1)) # array of number of each type of block [A,B,C]
+        # read board only keep relevant lines
         with open(fptr,"r") as f:
            for line in f:
                if line[0] == "#" or line == "\n" or line == "GRID START\n":
@@ -74,10 +40,10 @@ class Game(object):
                 lines.append(line)
         # find size of board create empty matrix rows x collumns
         collumns = []
-        display_board = []
+        display_board = [] # so you can print board __str__
         rows = 0
         characters = ['x','o','A','B','C']
-        #create empty numpy array of the size of the board
+        # find size of board/create string to print Board        
         for line in lines:
              if line[0] in characters and line[4] in characters:
                rows+=1
@@ -93,6 +59,7 @@ class Game(object):
                     board[i,j] = a[j*4]
                 else:
                     print('there is an error with reading in the board')
+        # assemble vector of points, lasers, blocks
         for i in range(rows,len(lines)):
             a = lines[i]
             if a[0] == "A":num_blocks[0] = (a[2]) 
@@ -103,8 +70,10 @@ class Game(object):
         laser = np.zeros((len(lasers),4))
         Ps = np.zeros((len(P),2))
         Pts = np.zeros((len(P),1),dtype=Point)
+        # convert to numpy
         for i in range(len(laser)):
             laser[i] = np.fromstring(lasers[i],dtype=int,sep=' ')
+        # convert to objects
         for i in range(len(Ps)):
             Ps[i] = np.fromstring(P[i],dtype = int,sep=' ')
             B = Point(Ps[i])
@@ -338,20 +307,8 @@ class Game(object):
         print(board_sol_arranged)
         np.savetxt('solution.txt', board_sol_arranged, fmt='%s', delimiter=',')
         
-
+    # run the game to solve
     def run(self):
-        '''
-        Difficulty 3
-
-        The main code is here.  We call the generate_boards function, then we
-        loop through, using set_board to assign a board, "play" the game,
-        check if the board is the solution, if so save_board, if not then
-        we loop.
-
-        **Returns**
-
-            None
-        '''
         # Get all boards
         print("Generating all the boards..."),
         sys.stdout.flush()
@@ -365,7 +322,6 @@ class Game(object):
         for b_index, board in enumerate(boards):
             # Set board
             board_checking = self.set_board(board)
-            # MAYBE MORE CODE HERE?
             # LOOP THROUGH LASERS
             for j, laser in enumerate(current_lasers): 
               child_laser = None
@@ -375,10 +331,6 @@ class Game(object):
                 self.solution = board
                 save_board()
                 break
-
-#read board and dispose of non-pertanent lines
-
-# B = Game("braid_5.input")
 
 BB = Game("../boards/diagonal_8.input")
 print(BB)
