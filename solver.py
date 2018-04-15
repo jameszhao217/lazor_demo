@@ -4,7 +4,7 @@ game object, initialized by a board, and then run the game!
 '''
 
 import time
-from lazor.objects.game import Game
+from objects.game import Game
 
 
 def solve(fptr):
@@ -21,4 +21,4 @@ def solve(fptr):
 
 
 if __name__ == "__main__":
-    solve("boards/mad_1.input")
+    solve("boards/vertices_2.input")
