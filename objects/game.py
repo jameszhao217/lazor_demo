@@ -230,8 +230,14 @@ class Game(object):
                     if self.board[x,y] == 'o':
                         board_draft.append(ppp[counter])
                         counter = counter + 1
+                    elif self.board[x,y] == 'A':
+                        board_draft.append(3)
+                    elif self.board[x,y] == 'B':
+                        board_draft.append(4)
+                    elif self.board[x,y] == 'C':
+                        board_draft.append(2)
                     else:
-                        board_draft.append(self.board[x,y])
+                        board_draft.append(1)
             boards.append(board_draft)
 
         self.boards = boards
@@ -262,35 +268,26 @@ class Game(object):
 
             None
         '''
-
         
         AAA = np.array(board) 
-        print(AAA)
         BBB = np.reshape(AAA, (self.rows, self.cols))      
-        print(BBB)
         
-        b0 = Block('0')
-        b1 = Block('1')
-        b2 = Block('2')
-        b3 = Block('3')
-        b4 = Block('4')
+        b0 = Block(0)
+        b1 = Block(1)
+        b2 = Block(2)
+        b3 = Block(3)
+        b4 = Block(4)
         
         BBB = np.array(BBB, dtype=Block)
         for i in range(self.rows):
             for j in range(self.cols):
-                if BBB[i,j] == '3' or 3:     # TYPE A
+                if BBB[i,j] == 3:     # TYPE A
                     BBB[i,j] = b3
-                elif BBB[i,j] == '4' :   # TYPE B
+                elif BBB[i,j] == 4 :   # TYPE B
                     BBB[i,j] = b4
-                elif BBB[i,j] == '2':   # TYPE C
+                elif BBB[i,j] == 2:   # TYPE C
                     BBB[i,j] = b2
-                elif BBB[i,j] == 'A':   # TYPE A
-                    BBB[i,j] = b3
-                elif BBB[i,j] == 'B':   # TYPE B
-                    BBB[i,j] = b4
-                elif BBB[i,j] == 'C':   # TYPE C
-                    BBB[i,j] = b2
-                elif BBB[i,j] == '0':   # Available
+                elif BBB[i,j] == 0:   # Available
                     BBB[i,j] = b0
                 else:                   # Not Available
                     BBB[i,j] = b1
@@ -343,9 +340,10 @@ class Game(object):
                 save_board()
                 break
 
-<<<<<<< HEAD
-BB = Game("../boards/vertices_2.input")
+# BB = Game("../boards/vertices_2.input")
+
+BB = Game("../boards/mad_7.input")
+
 print(BB)
 A = BB.run()
-=======
->>>>>>> master
+
