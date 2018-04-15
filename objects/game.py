@@ -7,7 +7,7 @@ from block import Block
 from point import Point
 from laser import Laser
 
-from itertools import permutations
+from itertools import permutations # Used in generate_boards(self)
 
 
 class Game(object):
@@ -17,8 +17,8 @@ class Game(object):
 
         self.fname = fptr
         self.read(fptr)
+
     # so the board read in can be printed
-    
     def __str__(self):
         a = 'this is the board read in'+'\n'
         b = '\n'.join(self.display_board)
@@ -91,23 +91,8 @@ class Game(object):
         self.laser = laser
         self.display_board = display_board   
         
-        
+    # Generate all possible board variations
     def generate_boards(self):
-
-        '''
-        Difficulty 3
-        A function to generate all possible board combinations with the
-        available blocks.
-        First get all possible combinations of blocks on the board (we'll call these boards)
-          We know we have self.blocks, and N_blocks = len(self.blocks)
-          We also know we have self.available_space
-          So, essentially we have to find all the possible ways to put N_blocks into
-          self.available_space
-        This becomes the "stars and bars" problem; however, we have distinguishable "stars",
-        and further we restrict our system so that only one thing can be put in each bin.
-        **Returns**
-            None
-        '''
 
         ### Obtain the number of each type of blocks from num_type_blocks
         N_Blocks_A = int(self.num_type_blocks[0])   # -----> Numbered 3
@@ -183,16 +168,16 @@ class Game(object):
         ### Assign Internal Permutations into Partitions ###
         ####################################################
 
+        # Make an empty list to write down all partitions
         boards_final = []
         
         pointer = 0
         for i in range(len(ppp_draft)):
             
-            boards_element = []
-            
+            boards_element = []    
             if pointer >= len(partitions_blocks):
                  turnover = pointer/len(partitions_blocks)
-                 pointer = pointer - len(partitions_blocks)*turnover
+                 pointer = pointer - len(partitions_blocks)*turnover # continue onto 
             
             count = 0
             for j in range(len(ppp_draft[i])):                
@@ -234,23 +219,6 @@ class Game(object):
 
     def set_board(self, board):
         
-        '''
-        Difficulty 2
-
-        A function to assign a potential board so that it can be checked.
-
-        **Parameters**
-
-            board: *list, Block*
-                A list of block positions.  Note, this list is filled with
-                None, unless a block is at said position, then it is a
-                Block object.
-
-        **Returns**
-
-            None
-        '''
-        
         ### Reshape the board (1D-array) into matrix form
         AAA = np.array(board) 
         BBB = np.reshape(AAA, (self.rows, self.cols))      
@@ -281,19 +249,9 @@ class Game(object):
     
 
     def save_board(self):
-        
-        '''
-        Difficulty 2
 
-        A function to save potential boards to file.  This is to be used when
-        the solution is found, but can also be used for debugging.
-
-        **Returns**
-
-            None
-        '''
-        
-        # Write the solution board to an external file named "solution.txt" 
+        # We used integers to represent each block type to improve our speed
+        # Now, we convert the integers back into Block types (A,B,C)
         solution_converted = []
         for i in range(len(self.solution)):
             if self.solution[i] == 0:
@@ -306,11 +264,14 @@ class Game(object):
                 solution_converted.append('A')                
             else:
                 solution_converted.append('B')
-        
+
+        # Reshape the 1D array into matrix (board) form
         board_draft_solution = solution_converted
         board_solution = np.array(board_draft_solution)
         board_sol_arranged = np.reshape(board_solution, (self.rows, self.cols))
         print(board_sol_arranged)
+
+        # Write the solution board to an external file named "solution.txt" 
         np.savetxt('solution.txt', board_sol_arranged, fmt='%s', delimiter=',')
         
     # run the game to solve
@@ -326,8 +287,7 @@ class Game(object):
         print("Playing boards...") 
         sys.stdout.flush()
         
-        # Loop through the boards, and "play" them
-
+        # Loop through all boards, and "play" them
         for b_index, board in enumerate(boards):
 
             board_checking = self.set_board(board)
