@@ -152,6 +152,15 @@ class Game(object):
         
         ### Functions used to produce internal permutations
         def unique_perms(series):
+            '''
+            Found on StackOverflow: 
+            Generate permutations of list with repeated elements
+
+            ***Reference**
+
+             - https://stackoverflow.com/a/4250183
+
+            '''
             return {"".join(p) for p in permutations(series)}
         
         ### Obtain the internal permutations at each board partition
