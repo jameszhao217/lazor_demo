@@ -21,4 +21,4 @@ def solve(fptr):
 
 
 if __name__ == "__main__":
-    solve("boards/mad_7.input")
+    solve("boards/tricky_1.input")
